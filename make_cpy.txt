@@ -1,0 +1,163 @@
+NAME = pipex
+bonus: $(LIBFT) $(PRINTF) $(NAME_BONUS)
+
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+
+SRC_FILE = /home/$(USER)/Proyects/pipex/Src_normal
+SRC_BONUS = /home/$(USER)/Proyects/pipex/Src_bonus
+INCLUDE = /home/$(USER)/Proyects/pipex/Include
+
+SRCS = $(SRC_FILE)/pipex.c $(SRC_FILE)/utils.c
+BONUS_SRCS = $(SRC_BONUS)/pipex_bonus.c $(SRC_BONUS)/utils_bonus.c \
+			$(SRC_BONUS)/parse_bonus.c \
+			$(SRC_BONUS)/exes_and_redirs_bonus.c
+			
+LIBFT_DIR = $(INCLUDE)/libft
+PRINTF_DIR = $(INCLUDE)/ft_printf
+
+OBJS = $(SRCS:.c=.o)
+BONUS_OBJS = $(BONUS_SRCS:%.c=%.o)
+
+HEADERS = pipex.h
+LIBFT = libft.a
+PRINTF = libftprintf.a
+
+
+all: $(LIBFT) $(PRINTF) $(NAME)
+
+bonus: $(LIBFT) $(PRINTF)
+	$(MAKE) OBJS="$(BONUS_OBJS)" $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -I$(SRC_FILE) -L$(LIBFT_DIR) -lft -L$(PRINFT_DIR) -lftprintf -o $(NAME)
+
+
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIBFT): 
+	make all -C $(INCLUDE)/libft
+
+$(PRINTF):
+	make all -C $(INCLUDE)/ft_printf
+	
+libft:
+	make all -C $(INCLUDE)/libft
+
+printf:
+	make all -C $(INCLUDE)/ft_printf
+	
+clean:
+	make clean -C $(INCLUDE)/libft
+	make clean -C $(INCLUDE)/ft_printf
+	rm -f $(OBJS) $(BONUS_OBJS)
+	
+fclean: clean
+	make fclean -C $(INCLUDE)/libft
+	make fclean -C $(INCLUDE)/ft_printf
+	rm -f $(NAME)
+
+re: fclean all
+
+PHONY: make clean fclean re bonus
+
+
+
+
+
+void	imput_process(char **argv, int *pipe_ports)
+{
+	int		fd_in;
+	char	**comands;
+	char	*x_f;
+	pid_t	id;
+	
+	if(pipe(pipe_ports) == -1)
+		ft_error(NULL, NULL, NULL, NULL);
+	id = fork();
+	if (id < 0)
+		ft_error(NULL, NULL, NULL, NULL);
+	if (id == 0)
+	{
+		fd_in = tunel_file(argv[1], 0);
+		printf("el vaor de fd_in es %d", fd_in);
+		comands = ft_split(argv[2], ' ');
+		if (!comands)
+		{
+			printf("entra aqui1\n");
+			ft_error(NULL, NULL, NULL, NULL);
+		}
+		x_f = comands[0];
+		x_f = check_exe(x_f);
+		close(pipe_ports[0]);
+		if (dup2(pipe_ports[1], STDOUT_FILENO) == -1 || !x_f || fd_in < 0)
+		{
+			printf("entra aqui2\n");
+			ft_error(comands, NULL, NULL, NULL);
+		}
+			ft_error(comands, NULL, NULL, NULL);
+		if(execve(x_f, comands, NULL) == -1)
+			ft_error(comands, NULL, NULL, NULL);
+	}
+}
+
+void	output_process(char **argv, int *pipe_ports)
+{
+    int     fd_out;
+    char    **comands;
+    char    *x_file;
+    pid_t   id;
+	int status;
+
+	close(pipe_ports[1]);
+    if (dup2(pipe_ports[0], STDIN_FILENO) == -1)
+		ft_error(NULL, NULL, NULL, NULL);
+    id = fork();
+    if (id < 0)
+        ft_error(NULL, NULL, NULL, NULL);
+    if (id == 0)
+    {
+        fd_out = tunel_file(argv[4], 1);
+        comands = ft_split(argv[3], ' ');
+        if (!comands)
+            ft_error(NULL, NULL, NULL, NULL);
+        x_file = comands[0];
+        x_file = check_exe(x_file);
+        if (!x_file || fd_out < 0 || execve(x_file, comands, NULL) == -1)
+		{
+			printf("entra aqui\n");
+			ft_error(comands, NULL, NULL, NULL);
+		}
+    }
+    waitpid(-1 , &status, 0);
+}
+
+int	tunel_file(char *file, char flag)
+{
+	int fd_target;
+	
+	if (flag == 0)
+	{
+		fd_target = open(file, O_CREAT | O_RDONLY, 0664);
+		if (fd_target < 0)
+			return(-1);
+		if (dup2(fd_target, STDIN_FILENO) == -1)
+		{
+			close (fd_target);
+			return(-1);
+		}
+	}
+	else
+	{
+		fd_target = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0664);
+		if (fd_target < 0)
+			return(-1);
+		if (dup2(fd_target, STDOUT_FILENO) == -1 || access(file, X_OK))
+		{
+			close (fd_target);
+			return(-1);
+		}
+	}
+	return (fd_target);
+}
