@@ -6,14 +6,14 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:03:16 by alex              #+#    #+#             */
-/*   Updated: 2025/01/07 22:52:03 by alex             ###   ########.fr       */
+/*   Updated: 2025/01/12 02:57:03 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H_BONUS
 # define PIPEX_H_BONUS
 
-#include "../Include/libft/libft.h"//los .h tiene que incluir las rutas de otros.h si no estan en la misma carpeta
+#include "../Include/libft/libft.h"
 #include "../Include/ft_printf/ft_printf.h"
 #include <unistd.h>
 #include <fcntl.h>

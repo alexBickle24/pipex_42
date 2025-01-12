@@ -6,7 +6,7 @@
 #    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/04 21:21:20 by alex              #+#    #+#              #
-#    Updated: 2025/01/10 11:38:18 by alex             ###   ########.fr        #
+#    Updated: 2025/01/12 02:52:28 by alex             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,10 @@ NAME = pipex
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
-SRC_FILE = /home/$(USER)/pipex_repo/Src_normal
-SRC_BONUS = /home/$(USER)/pipex_repo/Src_bonus
-INCLUDE = /home/$(USER)/Proyects/pipex/Include
+FILE_NAME = Proyects/pipex_repo
+SRC_FILE = /home/$(USER)/$(FILE_NAME)/Src_normal
+SRC_BONUS = /home/$(USER)/$(FILE_NAME)/Src_bonus
+INCLUDE = /home/$(USER)/$(FILE_NAME)/Include
 
 SRCS = $(SRC_FILE)/pipex.c $(SRC_FILE)/utils.c
 BONUS_SRCS = $(SRC_BONUS)/pipex_bonus.c $(SRC_BONUS)/utils_bonus.c \
@@ -36,9 +37,51 @@ PRINTF = libftprintf.a
 
 
 all: $(LIBFT) $(PRINTF) $(NAME)
+	@echo " "
+	@echo "+⡴⠑⡄⠀⠀⠀⠀⠀⠀⠀ ⣀⣀⣤⣤⣤⣀⡀"
+	@echo "+⠸⡇⠀⠿⡀⠀⠀⠀⣀⡴⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀"
+	@echo "+⠀⠀⠀⠀⠑⢄⣠⠾⠁⣀⣄⡈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣆"
+	@echo "+⠀⠀⠀⠀⢀⡀⠁⠀⠀⠈⠙⠛⠂⠈⣿⣿⣿⣿⣿⠿⡿⢿⣆"
+	@echo "+⠀⠀⠀⢀⡾⣁⣀⠀⠴⠂⠙⣗⡀⠀⢻⣿⣿⠭⢤⣴⣦⣤⣹⠀⠀⠀⢀⢴⣶⣆"
+	@echo "+⠀⠀⢀⣾⣿⣿⣿⣷⣮⣽⣾⣿⣥⣴⣿⣿⡿⢂⠔⢚⡿⢿⣿⣦⣴⣾⠸⣼⡿"
+	@echo "+⠀⢀⡞⠁⠙⠻⠿⠟⠉⠀⠛⢹⣿⣿⣿⣿⣿⣌⢤⣼⣿⣾⣿⡟⠉"
+	@echo "+⠀⣾⣷⣶⠇⠀⠀⣤⣄⣀⡀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇"
+	@echo "+⠀⠉⠈⠉⠀⠀⢦⡈⢻⣿⣿⣿⣶⣶⣶⣶⣤⣽⡹⣿⣿⣿⣿⡇"
+	@echo "+⠀⠀⠀⠀⠀⠀⠀⠉⠲⣽⡻⢿⣿⣿⣿⣿⣿⣿⣷⣜⣿⣿⣿⡇"
+	@echo "+⠀⠀ ⠀⠀⠀⠀⠀⢸⣿⣿⣷⣶⣮⣭⣽⣿⣿⣿⣿⣿⣿⣿⠇"
+	@echo "+⠀⠀⠀⠀⠀⠀⣀⣀⣈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇"
+	@echo "+⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃"
+	@echo "    _    _     ____    _    ____  ____  ___ _     "
+	@echo "   / \\  | |   / ___|  / \\  |  _ \\|  _ \\|_ _| |    "
+	@echo "  / _ \\ | |  | |     / _ \\ | |_) | |_) || || |    "
+	@echo " / ___ \\| |__| |___ / ___ \\|  _ <|  _ < | || |___ "
+	@echo "/_/   \\_\\_____\\____/_/   \\_\\_| \\_\\_| \\_\\___|_____|"
+	@echo " La carpeta predefinida es: $(FILE_NAME). Si quieres cambiarla pon el nombre de la carpeta que contiene al proyecto EJ: make FILE_NAME="nombre de tu carpeta" "
+	@echo " El test predefinido es: $(MAIN). Si quire cambiarlo pon el nombre del archivo que contiene tu main  EJ: MAIN="el test que quieras usar" "
 
 bonus: $(LIBFT) $(PRINTF)
 	$(MAKE) OBJS="$(BONUS_OBJS)" $(NAME)
+	@echo " "
+	@echo "+⡴⠑⡄⠀⠀⠀⠀⠀⠀⠀ ⣀⣀⣤⣤⣤⣀⡀"
+	@echo "+⠸⡇⠀⠿⡀⠀⠀⠀⣀⡴⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀"
+	@echo "+⠀⠀⠀⠀⠑⢄⣠⠾⠁⣀⣄⡈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣆"
+	@echo "+⠀⠀⠀⠀⢀⡀⠁⠀⠀⠈⠙⠛⠂⠈⣿⣿⣿⣿⣿⠿⡿⢿⣆"
+	@echo "+⠀⠀⠀⢀⡾⣁⣀⠀⠴⠂⠙⣗⡀⠀⢻⣿⣿⠭⢤⣴⣦⣤⣹⠀⠀⠀⢀⢴⣶⣆"
+	@echo "+⠀⠀⢀⣾⣿⣿⣿⣷⣮⣽⣾⣿⣥⣴⣿⣿⡿⢂⠔⢚⡿⢿⣿⣦⣴⣾⠸⣼⡿"
+	@echo "+⠀⢀⡞⠁⠙⠻⠿⠟⠉⠀⠛⢹⣿⣿⣿⣿⣿⣌⢤⣼⣿⣾⣿⡟⠉"
+	@echo "+⠀⣾⣷⣶⠇⠀⠀⣤⣄⣀⡀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇"
+	@echo "+⠀⠉⠈⠉⠀⠀⢦⡈⢻⣿⣿⣿⣶⣶⣶⣶⣤⣽⡹⣿⣿⣿⣿⡇"
+	@echo "+⠀⠀⠀⠀⠀⠀⠀⠉⠲⣽⡻⢿⣿⣿⣿⣿⣿⣿⣷⣜⣿⣿⣿⡇"
+	@echo "+⠀⠀ ⠀⠀⠀⠀⠀⢸⣿⣿⣷⣶⣮⣭⣽⣿⣿⣿⣿⣿⣿⣿⠇"
+	@echo "+⠀⠀⠀⠀⠀⠀⣀⣀⣈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇"
+	@echo "+⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃"
+	@echo "    _    _     ____    _    ____  ____  ___ _     "
+	@echo "   / \\  | |   / ___|  / \\  |  _ \\|  _ \\|_ _| |    "
+	@echo "  / _ \\ | |  | |     / _ \\ | |_) | |_) || || |    "
+	@echo " / ___ \\| |__| |___ / ___ \\|  _ <|  _ < | || |___ "
+	@echo "/_/   \\_\\_____\\____/_/   \\_\\_| \\_\\_| \\_\\___|_____|"
+	@echo " La carpeta predefinida es: $(FILE_NAME). Si quieres cambiarla pon el nombre de la carpeta que contiene al proyecto EJ: make FILE_NAME="nombre de tu carpeta" "
+	@echo " El test predefinido es: $(MAIN). Si quire cambiarlo pon el nombre del archivo que contiene tu main  EJ: MAIN="el test que quieras usar" "
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -I$(SRC_FILE) -L$(LIBFT_DIR) -lft -L$(PRINFT_DIR) -lftprintf -o $(NAME)

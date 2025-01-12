@@ -1,1 +1,12 @@
-adios
+Include
+Makefile
+Src_bonus
+Src_normal
+adios.txt
+comp.txt
+inter.txt
+juan.txt
+make_cpy.txt
+pipex
+temp.c
+test

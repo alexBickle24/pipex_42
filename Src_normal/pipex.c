@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:47:53 by alcarril          #+#    #+#             */
-/*   Updated: 2025/01/07 20:09:19 by alex             ###   ########.fr       */
+/*   Updated: 2025/01/12 03:10:53 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void	output_process(char **argv, int *pipe_ports)
         if (!x_file || fd_out < 0 || execve(x_file, comands, NULL) == -1)
 			ft_error(comands, NULL, NULL, NULL);
     }
-    waitpid(-1 , &status, 0);
+    while ((id = waitpid(-1, &status, 0)) > 0);
+
 }
 
 int	tunel_file(char *file, char flag)
@@ -111,5 +112,5 @@ int main(int argz, char **argv, char **env)
 		output_process(argv, pipe_ports);
 		return (0);
 	}
-	printf("Argumentos insuficinetes");
+	printf("Arguments error\n");
 }

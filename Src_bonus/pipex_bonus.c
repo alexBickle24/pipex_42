@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:47:53 by alcarril          #+#    #+#             */
-/*   Updated: 2025/01/10 12:53:16 by alex             ###   ########.fr       */
+/*   Updated: 2025/01/12 02:56:20 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	imput_process(char **arguments, int *pipe_ports, int src_file, int control)
 		if (src_file < 0)
 			ft_error(NULL, NULL, NULL, NULL);
 	}
-	printf("Entering imput_process\n");
 	if (src_file == -1)
 		ft_error(NULL, NULL, NULL, NULL);
 	if(pipe(pipe_ports) == -1)
@@ -36,7 +35,6 @@ void	imput_process(char **arguments, int *pipe_ports, int src_file, int control)
 		ft_error(NULL, NULL, NULL, NULL);
 	if (id == 0)
 	{
-		printf("Child process in imput_process\n");
 		pipe_forward(pipe_ports, 1,  STDOUT_FILENO);
 		search_and_exec(arguments, control - 1);
 	}
@@ -48,7 +46,6 @@ void	link_pipes(int *first_pipe, char **arguments, int control)
 	static int  iterations_control;
 	int			id;
 	
-	printf("Entering link_pipes\n");
 	if (iterations_control == 0)
 		pipe_forward(first_pipe, 0, STDIN_FILENO);
 	if (pipe(middle_pipes) == -1)
@@ -59,7 +56,6 @@ void	link_pipes(int *first_pipe, char **arguments, int control)
 		ft_error(NULL, NULL, NULL, NULL);
 	if (id == 0)
 	{
-		printf("Child process in link_pipes\n");
 		pipe_forward(middle_pipes, 1, STDOUT_FILENO);
 		search_and_exec(arguments, control);
 	}
@@ -72,7 +68,6 @@ void	output_process(char **argv, int *first_pipe_fd, int aux_control)
 	pid_t	id;
 	int		status;
 	
-	printf("Entering output_process\n");
 	if (aux_control == g_argz - 2)
 		pipe_forward(first_pipe_fd, 0, STDIN_FILENO);
 	id = fork();
@@ -80,7 +75,6 @@ void	output_process(char **argv, int *first_pipe_fd, int aux_control)
 		ft_error(NULL, NULL, NULL, NULL);
 	if (id == 0)
 	{
-		printf("Child process in output_process\n");
 		fd_trgt = tunel_file(argv[g_argz - 1], 1);
 		if (fd_trgt < 0)
 			ft_error(NULL, NULL, NULL, NULL);
@@ -96,11 +90,13 @@ int main(int argz, char **argv, char **env)
 	int		src_file;
 	int 	aux_control;
 	
-	printf("Starting main\n");
 	g_env = env;
 	g_argz = argz;
 	if (argz < 5)
+	{
+		printf("Arguments error\n");
 		return(1);
+	}
 	src_file = parse_prompt(argv, &control);
 	if (src_file == -1)
 		ft_error(NULL, NULL, NULL, NULL);
@@ -112,6 +108,5 @@ int main(int argz, char **argv, char **env)
 		control++;
 	}
 	output_process(argv, pipe_ports, aux_control);
-	printf("Exiting main\n");
 	return (0);
 }
