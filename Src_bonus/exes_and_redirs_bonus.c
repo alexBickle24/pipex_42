@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 02:56:26 by alex              #+#    #+#             */
-/*   Updated: 2025/01/10 11:36:11 by alex             ###   ########.fr       */
+/*   Updated: 2025/01/21 19:23:38 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,28 @@
 
 int	tunel_file(char *file, char flag)
 {
-	int fd_trgt;
-	
+	int	fd_trgt;
+
 	if (!flag)
 	{
 		fd_trgt = open(file, O_RDONLY | O_CREAT, 0664);
 		if (fd_trgt < 0)
-			return(-1);
+			return (-1);
 		if (dup2(fd_trgt, STDIN_FILENO) == -1)
 		{
-			close (fd_trgt);
-			return(-1);
+			close(fd_trgt);
+			return (-1);
 		}
 	}
 	else
 	{
 		fd_trgt = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 		if (fd_trgt < 0)
-			return(-1);
+			return (-1);
 		if (dup2(fd_trgt, STDOUT_FILENO) == -1)
 		{
-			close (fd_trgt);
-			return(-1);
+			close(fd_trgt);
+			return (-1);
 		}
 	}
 	return (fd_trgt);
@@ -44,7 +44,7 @@ int	tunel_file(char *file, char flag)
 void	pipe_forward(int *pipe_reference, int pipe_port, int fd)
 {
 	int		other_fd;
-	
+
 	if (pipe_port == 0)
 		other_fd = 1;
 	else
@@ -55,13 +55,13 @@ void	pipe_forward(int *pipe_reference, int pipe_port, int fd)
 	close(pipe_reference[pipe_port]);
 }
 
-void search_and_exec(char **arguments, int control)
+void	search_and_exec(char **arguments, int control)
 {
 	char	**orders_list;
 	char	*comand;
 	char	*x_file;
 
-    orders_list = ft_split((const char *)arguments[control], ' ');
+	orders_list = ft_split((const char *)arguments[control], ' ');
 	if (!orders_list)
 		ft_error(NULL, NULL, NULL, NULL);
 	comand = orders_list[0];
