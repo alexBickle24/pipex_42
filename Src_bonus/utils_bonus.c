@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:55:05 by alex              #+#    #+#             */
-/*   Updated: 2025/01/21 20:02:15 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/17 22:36:56 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	*check_exe(char *x_file)
 {
-	char	**posible_paths;
+	char	**absolute_paths_table;
 	char	*absolute_paths;
-	char	*relative_path;
+	char	*path;
 
 	absolute_paths = get_env_value("PATH");
 	if (!absolute_paths)
@@ -25,30 +25,30 @@ char	*check_exe(char *x_file)
 			return (x_file);
 		return (NULL);
 	}
-	posible_paths = ft_split(absolute_paths, ':');
-	if (!posible_paths)
+	absolute_paths_table = ft_split(absolute_paths, ':');
+	if (!absolute_paths)
 		return (NULL);
-	relative_path = get_relative_path(posible_paths, x_file);
-	if (!relative_path)
+	path = find_exe_file(absolute_paths_table, x_file);
+	if (!path)
 	{
 		if (access(x_file, F_OK | X_OK) != -1)
 			return (x_file);
-		return (ft_free_table(posible_paths), NULL);
+		return (ft_free_table(absolute_paths_table), NULL);
 	}
-	ft_free_table(posible_paths);
-	return (relative_path);
+	ft_free_table(absolute_paths_table);
+	return (path);
 }
 
 char	*get_env_value(const char *key_value)
 {
 	int		i;
-	size_t	len;
+	size_t	key_len;
 	char	*new_value;
 
 	if (!key_value)
 		return (NULL);
-	len = ft_strlen(key_value);
-	if (len == 0 || g_env == NULL)
+	key_len = ft_strlen(key_value);
+	if (key_len == 0 || g_env == NULL)
 		return (NULL);
 	new_value = ft_strjoin(key_value, "=");
 	if (new_value == NULL)
@@ -56,10 +56,10 @@ char	*get_env_value(const char *key_value)
 	i = 0;
 	while (g_env[i] != NULL)
 	{
-		if ((ft_strncmp(new_value, g_env[i], len + 1)) == 0)
+		if ((ft_strncmp(new_value, g_env[i], key_len + 1)) == 0)
 		{
 			free(new_value);
-			return ((g_env[i] + len + 1));
+			return ((g_env[i] + key_len + 1));
 		}
 		i++;
 	}
@@ -67,7 +67,7 @@ char	*get_env_value(const char *key_value)
 	return (NULL);
 }
 
-char	*get_relative_path(char **posible_paths, char *x_file)
+char	*find_exe_file(char **posible_paths, char *x_file)
 {
 	char	*relative_path;
 	char	*aux;
@@ -106,6 +106,9 @@ void	ft_error(char **table1, char **table2, char *str1, char *str2)
 		free(str1);
 	if (str2)
 		free(str2);
+	close(0);
+	close(1);
+	close(2);
 	perror(strerror(errno));
 	exit(1);
 }

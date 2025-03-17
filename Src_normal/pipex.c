@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:47:53 by alcarril          #+#    #+#             */
-/*   Updated: 2025/01/21 19:09:30 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/12 18:46:09 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,13 @@ void	imput_process(char **argv, int *pipe_ports)
 			ft_error(NULL, NULL, NULL, NULL);
 		x_f = comands[0];
 		x_f = check_exe(x_f);
-		close(pipe_ports[0]);
-		if (dup2(pipe_ports[1], STDOUT_FILENO) == -1 || !x_f || fd_in < 0)
+		close(pipe_ports[0]);//
+		if (dup2(pipe_ports[1], STDOUT_FILENO) == -1 || !x_f || fd_in < 0)//sustituir por pipe fordward
+		{
 			ft_error(comands, NULL, NULL, NULL);
+			close(pipe_ports[1]);//
+		}
+		close(pipe_ports[1]);//
 		if (execve(x_f, comands, NULL) == -1)
 			ft_error(comands, NULL, NULL, NULL);
 	}
@@ -53,6 +57,7 @@ void	output_process(char **argv, int *pipe_ports)
 	close(pipe_ports[1]);
 	if (dup2(pipe_ports[0], STDIN_FILENO) == -1)
 		ft_error(NULL, NULL, NULL, NULL);
+	close (pipe_ports[0]);
 	id = fork();
 	if (id < 0)
 		ft_error(NULL, NULL, NULL, NULL);
@@ -80,10 +85,7 @@ int	tunel_file(char *file, char flag)
 		if (fd_target < 0)
 			return (-1);
 		if (dup2(fd_target, STDIN_FILENO) == -1)
-		{
-			close(fd_target);
-			return (-1);
-		}
+			return (close(fd_target), -1);
 	}
 	else
 	{
@@ -91,11 +93,9 @@ int	tunel_file(char *file, char flag)
 		if (fd_target < 0)
 			return (-1);
 		if (dup2(fd_target, STDOUT_FILENO) == -1)
-		{
-			close(fd_target);
-			return (-1);
-		}
+			return (close(fd_target), -1);
 	}
+	close(fd_target);
 	return (fd_target);
 }
 
@@ -108,7 +108,9 @@ int	main(int argz, char **argv, char **env)
 		g_env = env;
 		imput_process(argv, pipe_ports);
 		output_process(argv, pipe_ports);
+		// close(pipe_ports[0]);
+		// close(pipe_ports[1]);
 		return (0);
 	}
-	printf("Arguments error\n");
+	write(2, "error\n", 6);
 }

@@ -6,19 +6,18 @@
 #    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/04 21:21:20 by alex              #+#    #+#              #
-#    Updated: 2025/01/12 02:52:28 by alex             ###   ########.fr        #
+#    Updated: 2025/03/17 07:05:24 by alex             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g
 
-FILE_NAME = Proyects/pipex_repo
-SRC_FILE = /home/$(USER)/$(FILE_NAME)/Src_normal
-SRC_BONUS = /home/$(USER)/$(FILE_NAME)/Src_bonus
-INCLUDE = /home/$(USER)/$(FILE_NAME)/Include
+SRC_FILE = Src_normal
+SRC_BONUS = Src_bonus
+INCLUDE = Include
 
 SRCS = $(SRC_FILE)/pipex.c $(SRC_FILE)/utils.c
 BONUS_SRCS = $(SRC_BONUS)/pipex_bonus.c $(SRC_BONUS)/utils_bonus.c \
@@ -35,22 +34,7 @@ HEADERS = pipex.h
 LIBFT = libft.a
 PRINTF = libftprintf.a
 
-
 all: $(LIBFT) $(PRINTF) $(NAME)
-	@echo " "
-	@echo "+⡴⠑⡄⠀⠀⠀⠀⠀⠀⠀ ⣀⣀⣤⣤⣤⣀⡀"
-	@echo "+⠸⡇⠀⠿⡀⠀⠀⠀⣀⡴⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀"
-	@echo "+⠀⠀⠀⠀⠑⢄⣠⠾⠁⣀⣄⡈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣆"
-	@echo "+⠀⠀⠀⠀⢀⡀⠁⠀⠀⠈⠙⠛⠂⠈⣿⣿⣿⣿⣿⠿⡿⢿⣆"
-	@echo "+⠀⠀⠀⢀⡾⣁⣀⠀⠴⠂⠙⣗⡀⠀⢻⣿⣿⠭⢤⣴⣦⣤⣹⠀⠀⠀⢀⢴⣶⣆"
-	@echo "+⠀⠀⢀⣾⣿⣿⣿⣷⣮⣽⣾⣿⣥⣴⣿⣿⡿⢂⠔⢚⡿⢿⣿⣦⣴⣾⠸⣼⡿"
-	@echo "+⠀⢀⡞⠁⠙⠻⠿⠟⠉⠀⠛⢹⣿⣿⣿⣿⣿⣌⢤⣼⣿⣾⣿⡟⠉"
-	@echo "+⠀⣾⣷⣶⠇⠀⠀⣤⣄⣀⡀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇"
-	@echo "+⠀⠉⠈⠉⠀⠀⢦⡈⢻⣿⣿⣿⣶⣶⣶⣶⣤⣽⡹⣿⣿⣿⣿⡇"
-	@echo "+⠀⠀⠀⠀⠀⠀⠀⠉⠲⣽⡻⢿⣿⣿⣿⣿⣿⣿⣷⣜⣿⣿⣿⡇"
-	@echo "+⠀⠀ ⠀⠀⠀⠀⠀⢸⣿⣿⣷⣶⣮⣭⣽⣿⣿⣿⣿⣿⣿⣿⠇"
-	@echo "+⠀⠀⠀⠀⠀⠀⣀⣀⣈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇"
-	@echo "+⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃"
 	@echo "    _    _     ____    _    ____  ____  ___ _     "
 	@echo "   / \\  | |   / ___|  / \\  |  _ \\|  _ \\|_ _| |    "
 	@echo "  / _ \\ | |  | |     / _ \\ | |_) | |_) || || |    "
@@ -61,20 +45,6 @@ all: $(LIBFT) $(PRINTF) $(NAME)
 
 bonus: $(LIBFT) $(PRINTF)
 	$(MAKE) OBJS="$(BONUS_OBJS)" $(NAME)
-	@echo " "
-	@echo "+⡴⠑⡄⠀⠀⠀⠀⠀⠀⠀ ⣀⣀⣤⣤⣤⣀⡀"
-	@echo "+⠸⡇⠀⠿⡀⠀⠀⠀⣀⡴⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀"
-	@echo "+⠀⠀⠀⠀⠑⢄⣠⠾⠁⣀⣄⡈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣆"
-	@echo "+⠀⠀⠀⠀⢀⡀⠁⠀⠀⠈⠙⠛⠂⠈⣿⣿⣿⣿⣿⠿⡿⢿⣆"
-	@echo "+⠀⠀⠀⢀⡾⣁⣀⠀⠴⠂⠙⣗⡀⠀⢻⣿⣿⠭⢤⣴⣦⣤⣹⠀⠀⠀⢀⢴⣶⣆"
-	@echo "+⠀⠀⢀⣾⣿⣿⣿⣷⣮⣽⣾⣿⣥⣴⣿⣿⡿⢂⠔⢚⡿⢿⣿⣦⣴⣾⠸⣼⡿"
-	@echo "+⠀⢀⡞⠁⠙⠻⠿⠟⠉⠀⠛⢹⣿⣿⣿⣿⣿⣌⢤⣼⣿⣾⣿⡟⠉"
-	@echo "+⠀⣾⣷⣶⠇⠀⠀⣤⣄⣀⡀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇"
-	@echo "+⠀⠉⠈⠉⠀⠀⢦⡈⢻⣿⣿⣿⣶⣶⣶⣶⣤⣽⡹⣿⣿⣿⣿⡇"
-	@echo "+⠀⠀⠀⠀⠀⠀⠀⠉⠲⣽⡻⢿⣿⣿⣿⣿⣿⣿⣷⣜⣿⣿⣿⡇"
-	@echo "+⠀⠀ ⠀⠀⠀⠀⠀⢸⣿⣿⣷⣶⣮⣭⣽⣿⣿⣿⣿⣿⣿⣿⠇"
-	@echo "+⠀⠀⠀⠀⠀⠀⣀⣀⣈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇"
-	@echo "+⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃"
 	@echo "    _    _     ____    _    ____  ____  ___ _     "
 	@echo "   / \\  | |   / ___|  / \\  |  _ \\|  _ \\|_ _| |    "
 	@echo "  / _ \\ | |  | |     / _ \\ | |_) | |_) || || |    "

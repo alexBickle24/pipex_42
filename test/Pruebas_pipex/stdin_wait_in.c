@@ -36,7 +36,7 @@ int main(void)
         }
         else
         {
-            wait(NULL);
+            // wait(NULL);
             printf("%d  Escribo en el archivo desde el porceso padre, mi pid es %d\n", i, getpid());
         }
     }
