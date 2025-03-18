@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:03:16 by alex              #+#    #+#             */
-/*   Updated: 2025/03/17 22:48:40 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/18 01:46:01 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ extern int	g_argz;
 
 unsigned int	write_env(char *line, int fd_dest, unsigned int count);
 unsigned int	hrdoc_exec(char *line, int fd_inter, int counters);
-void			imput_process(char **args, int *pipe_p, char *src_file, int cont);
+void			imput_process(char **args, int *pipe_p,
+					char *src_file, int cont);
 void			link_pipes(int *first_pipe, char **arguments, int control);
 void			output_process(char **argv, int *first_pipe_fd, int aux_cont);
 char			*check_exe(char *x_file);

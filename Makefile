@@ -6,14 +6,14 @@
 #    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/04 21:21:20 by alex              #+#    #+#              #
-#    Updated: 2025/03/17 07:05:24 by alex             ###   ########.fr        #
+#    Updated: 2025/03/18 01:15:29 by alex             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g 
 
 SRC_FILE = Src_normal
 SRC_BONUS = Src_bonus

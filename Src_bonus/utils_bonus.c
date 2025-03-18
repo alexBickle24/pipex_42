@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:55:05 by alex              #+#    #+#             */
-/*   Updated: 2025/03/17 22:36:56 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/18 00:19:54 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,10 @@ void	ft_error(char **table1, char **table2, char *str1, char *str2)
 		free(str1);
 	if (str2)
 		free(str2);
-	close(0);
-	close(1);
-	close(2);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
 	perror(strerror(errno));
+	close(STDERR_FILENO);
 	exit(1);
 }
 
