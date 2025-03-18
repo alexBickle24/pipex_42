@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 02:56:26 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 01:40:32 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/18 09:02:29 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,11 @@ void	pipe_forward(int *pipe_reference, int pipe_port, int fd)
 
 void	close_fds(int *pipe_ports)
 {
-	close(pipe_ports[0]);
-	close(pipe_ports[1]);
+	if (pipe_ports)
+	{
+		close(pipe_ports[0]);
+		close(pipe_ports[1]);
+	}
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
@@ -79,5 +82,5 @@ void	search_and_exec(char **arguments, int control)
 	comand = orders_list[0];
 	x_file = check_exe(comand);
 	if (execve(x_file, orders_list, g_env) == -1)
-		ft_error(orders_list, NULL, NULL, NULL);
+		ft_error(orders_list, NULL, x_file, g_src_file);
 }

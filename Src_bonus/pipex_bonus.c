@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:47:53 by alcarril          #+#    #+#             */
-/*   Updated: 2025/03/18 01:44:36 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/18 09:06:23 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 char	**g_env;
 int		g_argz;
+char	*g_src_file;
 
 void	imput_process(char **args, int *pipe_p, char *src_file, int cont)
 {
@@ -41,6 +42,7 @@ void	imput_process(char **args, int *pipe_p, char *src_file, int cont)
 		if (unlink(src_file) < 0)
 			ft_error(NULL, NULL, src_file, NULL);
 	free(src_file);
+	src_file = NULL;
 }
 
 void	link_pipes(int *first_pipe, char **arguments, int control)
@@ -85,9 +87,10 @@ void	output_process(char **argv, int *first_pipe_fd, int aux_cont)
 			ft_error(NULL, NULL, NULL, NULL);
 		search_and_exec(argv, g_argz - 2);
 	}
-	while ((id = waitpid(-1, &status, 0)) > 0);//cambiar esta linea para qu ehaga lo mismo pero que pase la norma
-	if (aux_cont == g_argz - 2)
-		close_fds(first_pipe_fd);
+	id = waitpid(-1, &status, 0);
+	while (id > 0)
+		id = waitpid(-1, &status, 0);
+	close_fds(NULL);
 }
 
 int	main(int argz, char **argv, char **env)
@@ -106,6 +109,7 @@ int	main(int argz, char **argv, char **env)
 	if (!src_file)
 		ft_error(NULL, NULL, NULL, NULL);
 	aux_control = control;
+	g_src_file = src_file;
 	imput_process(argv, pipe_ports, src_file, control);
 	while (control < argz - 2)
 	{

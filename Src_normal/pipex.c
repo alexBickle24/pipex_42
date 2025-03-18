@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:47:53 by alcarril          #+#    #+#             */
-/*   Updated: 2025/03/18 01:35:36 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/18 08:02:30 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,9 @@ void	output_process(char **argv, int *pipe_ports)
 		if (execve(x_file, comands, NULL) == -1)
 			ft_error(comands, NULL, x_file, NULL);
 	}
-	while (waitpid(-1, &status, 0) > 0);//cambiar esto
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
+	id = waitpid(-1, &status, 0);
+	while (id > 0)
+		id = waitpid(-1, &status, 0);
 }
 
 int	tunel_file(char *file, char flag)
@@ -119,6 +118,9 @@ int	main(int argz, char **argv, char **env)
 		g_env = env;
 		imput_process(argv, pipe_ports);
 		output_process(argv, pipe_ports);
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
 		return (0);
 	}
 	return (ft_putstr_fd(ERROR, 2), 1);

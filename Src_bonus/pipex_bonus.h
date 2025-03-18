@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:03:16 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 01:46:01 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/18 09:02:02 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 extern char	**g_env;
 extern int	g_argz;
+extern char	*g_src_file;
 
 unsigned int	write_env(char *line, int fd_dest, unsigned int count);
 unsigned int	hrdoc_exec(char *line, int fd_inter, int counters);
