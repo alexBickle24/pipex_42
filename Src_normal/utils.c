@@ -6,19 +6,19 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:55:05 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 00:17:52 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/20 23:13:34 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	*check_exe(char *x_file)
+char	*check_exe(char *x_file, char **env)
 {
 	char	**posible_paths;
 	char	*absolute_paths;
 	char	*relative_path;
 
-	absolute_paths = get_env_value("PATH");
+	absolute_paths = get_env_value("PATH", env);
 	if (!absolute_paths)
 	{
 		if (access(x_file, F_OK | X_OK))
@@ -39,7 +39,7 @@ char	*check_exe(char *x_file)
 	return (relative_path);
 }
 
-char	*get_env_value(const char *key_value)
+char	*get_env_value(const char *key_value, char **env)
 {
 	char	*new_value;
 	size_t	len;
@@ -48,7 +48,7 @@ char	*get_env_value(const char *key_value)
 	if (!key_value)
 		return (NULL);
 	len = ft_strlen(key_value);
-	if (len == 0 || g_env == NULL)
+	if (len == 0 || env == NULL)
 		return (NULL);
 	new_value = ft_strjoin(key_value, "=");
 	if (new_value == NULL)
@@ -56,7 +56,7 @@ char	*get_env_value(const char *key_value)
 	i = 0;
 	while (g_env[i] != NULL)
 	{
-		if ((ft_strncmp(new_value, g_env[i], len + 1)) == 0)
+		if ((ft_strncmp(new_value, env[i], len + 1)) == 0)
 		{
 			free(new_value);
 			return ((g_env[i] + len + 1));

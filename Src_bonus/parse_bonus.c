@@ -6,13 +6,13 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 14:39:57 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 01:42:37 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/21 19:07:08 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-char	*parse_prompt(char **arg, int *control)
+char	*parse_prompt(char **arg, int argz, int *control, char **env)
 {
 	static char		*l;
 	char			*src_name;
@@ -26,14 +26,14 @@ char	*parse_prompt(char **arg, int *control)
 	*control = 4;
 	src_name = new_file_name("/tmp/");
 	fd_inter = open(src_name, O_CREAT | O_TRUNC | O_APPEND | O_RDWR, 0664);
-	if (fd_inter < 0 || g_argz < 6)
-		return (NULL);
+	if (fd_inter < 0 || argz < 6)
+		return (free(src_name), NULL);
 	write(1, ">", 1);
 	l = get_next_line(0);
 	while (ft_strncmp(l, arg[2], ft_strlen(arg[2])) != 0
 		|| (ft_strlen(l) - 1) != ft_strlen(arg[2]))
 	{
-		write_line_in_heredoc(l, fd_inter);
+		write_line_in_heredoc(l, fd_inter, env);
 		free(l);
 		write(1, ">", 1);
 		l = get_next_line(0);
@@ -41,7 +41,7 @@ char	*parse_prompt(char **arg, int *control)
 	return (free(l), close (fd_inter), src_name);
 }
 
-void	write_line_in_heredoc(char *line, int fd_inter)
+void	write_line_in_heredoc(char *line, int fd_inter, char **env)
 {
 	unsigned int	i;
 
@@ -55,7 +55,7 @@ void	write_line_in_heredoc(char *line, int fd_inter)
 			if ((line[i + 1] != '(' && line[i + 1] != ' '
 					&& line[i + 1] != '\n' && line[i + 1] != '$'))
 			{
-				i = write_env(&line[i], fd_inter, i);
+				i = write_env(&line[i], fd_inter, i, env);
 			}
 			else
 				ft_putchar_fd(line[i], fd_inter);
@@ -79,7 +79,7 @@ char	*trim_line(char *line)
 	return (line);
 }
 
-unsigned int	write_env(char *line, int fd_dest, unsigned int count)
+unsigned int	write_env(char *line, int fd_dest, unsigned int count, char **env)
 {
 	char		*env_value;
 	char		*env_name;
@@ -92,7 +92,7 @@ unsigned int	write_env(char *line, int fd_dest, unsigned int count)
 	env_name = ft_substr((const char *)line, 1, i -1);
 	if (!env_name)
 		return (0);
-	env_value = get_env_value(env_name);
+	env_value = get_env_value(env_name, env);
 	if (!env_value)
 	{
 		free(env_name);

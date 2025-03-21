@@ -6,37 +6,42 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 02:56:26 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 09:02:29 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/21 19:01:40 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-int	tunel_file(char *file, char flag)
+int	tunel_in_file(char *file)
 {
 	int	fd_trgt;
 
-	if (!flag)
+	if (access(file, F_OK | R_OK) == -1)
+		return (-1);
+	fd_trgt = open(file, O_RDONLY, 0664);
+	if (fd_trgt < 0)
+		return (-1);
+	if (dup2(fd_trgt, STDIN_FILENO) == -1)
 	{
-		fd_trgt = open(file, O_RDONLY, 0664);
-		if (fd_trgt < 0)
-			return (-1);
-		if (dup2(fd_trgt, STDIN_FILENO) == -1)
-		{
-			close(fd_trgt);
-			return (-1);
-		}
+		close(fd_trgt);
+		return (-1);
 	}
-	else
+	return (close(fd_trgt), fd_trgt);
+}
+
+int	tunel_out_file(char *file)
+{
+	int	fd_trgt;
+
+	if (access(file, F_OK) != -1 && access(file, W_OK) == -1)
+		return (-1);
+	fd_trgt = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	if (fd_trgt < 0)
+		return (-1);
+	if (dup2(fd_trgt, STDOUT_FILENO) == -1)
 	{
-		fd_trgt = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
-		if (fd_trgt < 0)
-			return (-1);
-		if (dup2(fd_trgt, STDOUT_FILENO) == -1)
-		{
-			close(fd_trgt);
-			return (-1);
-		}
+		close(fd_trgt);
+		return (-1);
 	}
 	return (close(fd_trgt), fd_trgt);
 }
@@ -70,17 +75,38 @@ void	close_fds(int *pipe_ports)
 	close(STDERR_FILENO);
 }
 
-void	search_and_exec(char **arguments, int control)
+void	search_and_exec(t_control *control, int position, char error_mode)
 {
 	char	**orders_list;
 	char	*comand;
 	char	*x_file;
 
-	orders_list = ft_split((const char *)arguments[control], ' ');
+	orders_list = ft_split((const char *)(control->args[position]), ' ');
 	if (!orders_list)
-		ft_error(NULL, NULL, NULL, NULL);
+		ft_error(NULL, control->src_file, NULL, NULL);
 	comand = orders_list[0];
-	x_file = check_exe(comand);
-	if (execve(x_file, orders_list, g_env) == -1)
-		ft_error(orders_list, NULL, x_file, g_src_file);
+	x_file = check_exe(comand, control->env);
+	if (x_file && (access(x_file, X_OK) == -1))
+	{
+		ft_error(orders_list, control->src_file, x_file, strerror(EACCES));
+	}
+	else if (x_file && error_mode)
+	{
+		ft_error(orders_list, x_file, control->src_file, strerror(ENOENT));
+	}
+	else if (execve(x_file, orders_list, control->env) == -1)
+	{
+		ft_error(orders_list, control->src_file, orders_list[0], "command not found");//
+	}
+}
+
+void	set_control(t_control *control, char **argv, int argz, char **env)
+{
+	if (!control)
+		return ;
+	control->control = 3;
+	control->args = argv;
+	control->num_args = argz;
+	control->env = env;
+	control->src_file = NULL;
 }

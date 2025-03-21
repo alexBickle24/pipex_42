@@ -6,46 +6,40 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:47:53 by alcarril          #+#    #+#             */
-/*   Updated: 2025/03/18 09:06:23 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/21 19:11:31 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-char	**g_env;
-int		g_argz;
-char	*g_src_file;
 
-void	imput_process(char **args, int *pipe_p, char *src_file, int cont)
+void	imput_process(t_control *control, int *pipe_p)
 {
 	pid_t		id;
 	int			src_fd;
-	static char	bool;
+	static char	error_mode;
 
 	if (pipe(pipe_p) == -1)
 		ft_error(NULL, NULL, NULL, NULL);
-	src_fd = tunel_file(src_file, 0);
+	src_fd = tunel_in_file(control->src_file);
 	if (src_fd < 0)
-	{
-		bool = 1;
-		perror(strerror(errno));
-	}
+		error_mode = 1;
 	id = fork();
 	if (id < 0)
-		ft_error(NULL, NULL, src_file, NULL);
-	if (id == 0 && !bool)
-	{
+		ft_error(NULL, control->src_file, NULL, NULL);
+	if (id == 0)
+	{		
 		pipe_forward(pipe_p, 1, STDOUT_FILENO);
-		search_and_exec(args, cont - 1);
+		search_and_exec(control, control->control - 1, error_mode);
 	}
-	if (cont == 4)
-		if (unlink(src_file) < 0)
-			ft_error(NULL, NULL, src_file, NULL);
-	free(src_file);
-	src_file = NULL;
+	if (control->control == 4)
+		if (unlink(control->src_file) < 0)
+			ft_error(NULL, NULL, control->src_file, strerror(errno));
+	free(control->src_file);
+	control->src_file = NULL;
 }
 
-void	link_pipes(int *first_pipe, char **arguments, int control)
+void	link_pipes(t_control *control, int *first_pipe)
 {
 	static int	iterations_control;
 	int			middle_pipes[2];
@@ -62,30 +56,33 @@ void	link_pipes(int *first_pipe, char **arguments, int control)
 	if (id == 0)
 	{
 		pipe_forward(middle_pipes, 1, STDOUT_FILENO);
-		search_and_exec(arguments, control);
+		search_and_exec(control, control->control, 0);
 	}
 	pipe_forward(middle_pipes, 0, STDIN_FILENO);
 	close (middle_pipes[0]);
 	close (middle_pipes[1]);
 }
 
-void	output_process(char **argv, int *first_pipe_fd, int aux_cont)
+void	output_process(t_control *control, int *first_pipe_fd)
 {
 	pid_t	id;
 	int		fd_out;
 	int		status;
 
-	if (aux_cont == g_argz - 2)
+	if (control->start == control->num_args - 2)
 		pipe_forward(first_pipe_fd, 0, STDIN_FILENO);
 	id = fork();
 	if (id < 0)
 		ft_error(NULL, NULL, NULL, NULL);
 	if (id == 0)
 	{
-		fd_out = tunel_file(argv[g_argz - 1], 1);
+		fd_out = tunel_out_file(control->args[control->num_args - 1]);
 		if (fd_out < 0)
-			ft_error(NULL, NULL, NULL, NULL);
-		search_and_exec(argv, g_argz - 2);
+		{	
+			perror(control->args[control->num_args - 1]);
+			exit (1);
+		}
+		search_and_exec(control, control->num_args - 2, 0);
 	}
 	id = waitpid(-1, &status, 0);
 	while (id > 0)
@@ -95,27 +92,26 @@ void	output_process(char **argv, int *first_pipe_fd, int aux_cont)
 
 int	main(int argz, char **argv, char **env)
 {
-	int		pipe_ports[2];
-	char	*src_file;
-	int		control;
-	int		aux_control;
+	t_control	c;//tiene sentido que sea la memeria local ya que aqui se le pasan lso argumentos ya limpios en minishell
+	int			pipe_ports[2];
 
-	g_env = env;
-	g_argz = argz;
-	control = 3;
+	set_control(&c, argv, argz, env);
 	if (argz < 5)
 		return (ft_putstr_fd(ERROR, 2), 1);
-	src_file = parse_prompt(argv, &control);
-	if (!src_file)
-		ft_error(NULL, NULL, NULL, NULL);
-	aux_control = control;
-	g_src_file = src_file;
-	imput_process(argv, pipe_ports, src_file, control);
-	while (control < argz - 2)
+	c.src_file = parse_prompt(c.args, c.num_args, &(c.control), c.env);
+	if (!c.src_file)
 	{
-		link_pipes(pipe_ports, argv, control);
-		control++;
+		if (c.control == 4 && c.num_args < 6)
+			return (ft_putstr_fd(ERROR_HEREDOC, 2), 1);//toda la parte del aprseo y control de errores de argumentos habria que qitarla para minishjell
+		return (1);
 	}
-	output_process(argv, pipe_ports, aux_control);
+	c.start = c.control;
+	imput_process(&c, pipe_ports);
+	while (c.control < argz - 2)
+	{
+		link_pipes(&c, pipe_ports);
+		c.control++;
+	}
+	output_process(&c, pipe_ports);
 	return (0);
 }
