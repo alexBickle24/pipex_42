@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:55:05 by alex              #+#    #+#             */
-/*   Updated: 2025/03/22 04:56:16 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 14:25:52 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,9 @@ void	ft_error(char **table1, char *ptr1, char *message, char *error)
 	}
 	else
 		perror("");
-	if ((message && table1) && (message == table1[0]))//caundo message estac ontenido en table arguments, peude estarlo o no segun la rurta y el caso 
+	if ((message && table1) && (message == table1[0]))
 		message = NULL;
-	if ((ptr1 && table1) && (ptr1 != table1[0]))//cuando ptr1 esta contenido en las ordenes, es decir no se le ha dado ruta
+	if ((ptr1 && table1) && (ptr1 != table1[0]))
 	{
 		free(ptr1);
 		ptr1 = NULL;

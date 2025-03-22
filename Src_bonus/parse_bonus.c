@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 14:39:57 by alex              #+#    #+#             */
-/*   Updated: 2025/03/21 19:07:08 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 15:02:09 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*trim_line(char *line)
 	return (line);
 }
 
-unsigned int	write_env(char *line, int fd_dest, unsigned int count, char **env)
+unsigned int	write_env(char *line, int fd, unsigned int count, char **env)
 {
 	char		*env_value;
 	char		*env_name;
@@ -98,7 +98,7 @@ unsigned int	write_env(char *line, int fd_dest, unsigned int count, char **env)
 		free(env_name);
 		return (count - 1);
 	}
-	ft_putstr_fd(env_value, fd_dest);
+	ft_putstr_fd(env_value, fd);
 	return (free(env_name), count - 1);
 }
 

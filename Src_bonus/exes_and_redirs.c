@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exes_and_redirs_bonus.c                            :+:      :+:    :+:   */
+/*   exes_and_redirs.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 02:56:26 by alex              #+#    #+#             */
-/*   Updated: 2025/03/22 03:19:36 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 15:00:10 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,37 +75,26 @@ void	close_fds(int *pipe_ports)
 	close(STDERR_FILENO);
 }
 
-void	search_and_exec(t_control *control, int position)
+void	search_and_exec(t_control *c, int position)
 {
 	char	**orders_list;
 	char	*comand;
 	char	*x_file;
 
-	orders_list = ft_split((const char *)(control->args[position]), ' ');
+	orders_list = ft_split((const char *)(c->args[position]), ' ');
 	if (!orders_list)
 	{
-		free(control->src_file);
+		free(c->src_file);
 		exit(1);
 	}
 	comand = orders_list[0];
-	x_file = check_exe(comand, control->env);
+	x_file = check_exe(comand, c->env);
 	if (x_file && (access(x_file, F_OK | X_OK) == -1))
 	{
-		ft_error(orders_list, control->src_file, x_file, strerror(errno));
+		ft_error(orders_list, c->src_file, x_file, strerror(errno));
 	}
-	else if (!x_file || execve(x_file, orders_list, control->env) == -1)
+	else if (!x_file || execve(x_file, orders_list, c->env) == -1)
 	{
-		ft_error(orders_list, control->src_file, orders_list[0], "command not found");
+		ft_error(orders_list, c->src_file, comand, "command not found");
 	}
-}
-
-void	set_control(t_control *control, char **argv, int argz, char **env)
-{
-	if (!control)
-		return ;
-	control->control = 3;
-	control->args = argv;
-	control->num_args = argz;
-	control->env = env;
-	control->src_file = NULL;
 }
