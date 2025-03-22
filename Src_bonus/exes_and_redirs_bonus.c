@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 02:56:26 by alex              #+#    #+#             */
-/*   Updated: 2025/03/21 19:01:40 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 03:19:36 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,14 @@ int	tunel_in_file(char *file)
 		close(fd_trgt);
 		return (-1);
 	}
-	return (close(fd_trgt), fd_trgt);
+	close(fd_trgt);
+	return (fd_trgt);
 }
 
 int	tunel_out_file(char *file)
 {
 	int	fd_trgt;
 
-	if (access(file, F_OK) != -1 && access(file, W_OK) == -1)
-		return (-1);
 	fd_trgt = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	if (fd_trgt < 0)
 		return (-1);
@@ -43,7 +42,8 @@ int	tunel_out_file(char *file)
 		close(fd_trgt);
 		return (-1);
 	}
-	return (close(fd_trgt), fd_trgt);
+	close(fd_trgt);
+	return (fd_trgt);
 }
 
 void	pipe_forward(int *pipe_reference, int pipe_port, int fd)
@@ -75,7 +75,7 @@ void	close_fds(int *pipe_ports)
 	close(STDERR_FILENO);
 }
 
-void	search_and_exec(t_control *control, int position, char error_mode)
+void	search_and_exec(t_control *control, int position)
 {
 	char	**orders_list;
 	char	*comand;
@@ -83,20 +83,19 @@ void	search_and_exec(t_control *control, int position, char error_mode)
 
 	orders_list = ft_split((const char *)(control->args[position]), ' ');
 	if (!orders_list)
-		ft_error(NULL, control->src_file, NULL, NULL);
+	{
+		free(control->src_file);
+		exit(1);
+	}
 	comand = orders_list[0];
 	x_file = check_exe(comand, control->env);
-	if (x_file && (access(x_file, X_OK) == -1))
+	if (x_file && (access(x_file, F_OK | X_OK) == -1))
 	{
-		ft_error(orders_list, control->src_file, x_file, strerror(EACCES));
+		ft_error(orders_list, control->src_file, x_file, strerror(errno));
 	}
-	else if (x_file && error_mode)
+	else if (!x_file || execve(x_file, orders_list, control->env) == -1)
 	{
-		ft_error(orders_list, x_file, control->src_file, strerror(ENOENT));
-	}
-	else if (execve(x_file, orders_list, control->env) == -1)
-	{
-		ft_error(orders_list, control->src_file, orders_list[0], "command not found");//
+		ft_error(orders_list, control->src_file, orders_list[0], "command not found");
 	}
 }
 

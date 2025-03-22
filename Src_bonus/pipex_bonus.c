@@ -6,32 +6,32 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:47:53 by alcarril          #+#    #+#             */
-/*   Updated: 2025/03/21 19:11:31 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 04:43:01 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-
 void	imput_process(t_control *control, int *pipe_p)
 {
 	pid_t		id;
-	int			src_fd;
 	static char	error_mode;
 
 	if (pipe(pipe_p) == -1)
 		ft_error(NULL, NULL, NULL, NULL);
-	src_fd = tunel_in_file(control->src_file);
-	if (src_fd < 0)
-		error_mode = 1;
-	id = fork();
-	if (id < 0)
-		ft_error(NULL, control->src_file, NULL, NULL);
-	if (id == 0)
-	{		
-		pipe_forward(pipe_p, 1, STDOUT_FILENO);
-		search_and_exec(control, control->control - 1, error_mode);
+	if (tunel_in_file(control->src_file) != -1)
+	{
+		id = fork();
+		if (id < 0)
+			ft_error(NULL, control->src_file, NULL, NULL);
+		if (id == 0 && !error_mode)
+		{		
+			pipe_forward(pipe_p, 1, STDOUT_FILENO);
+			search_and_exec(control, control->control - 1);
+		}
 	}
+	else 
+		perror(control->src_file);
 	if (control->control == 4)
 		if (unlink(control->src_file) < 0)
 			ft_error(NULL, NULL, control->src_file, strerror(errno));
@@ -56,7 +56,7 @@ void	link_pipes(t_control *control, int *first_pipe)
 	if (id == 0)
 	{
 		pipe_forward(middle_pipes, 1, STDOUT_FILENO);
-		search_and_exec(control, control->control, 0);
+		search_and_exec(control, control->control);
 	}
 	pipe_forward(middle_pipes, 0, STDIN_FILENO);
 	close (middle_pipes[0]);
@@ -80,9 +80,10 @@ void	output_process(t_control *control, int *first_pipe_fd)
 		if (fd_out < 0)
 		{	
 			perror(control->args[control->num_args - 1]);
+			close_fds(NULL);
 			exit (1);
 		}
-		search_and_exec(control, control->num_args - 2, 0);
+		search_and_exec(control, control->num_args - 2);
 	}
 	id = waitpid(-1, &status, 0);
 	while (id > 0)

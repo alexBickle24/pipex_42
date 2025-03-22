@@ -5,6 +5,6 @@
 
 int main(void)
 {
-	int fd = open("/tmp/hola", O_CREAT);
-	return (0);
+	printf("hola");
+	return(0);
 }

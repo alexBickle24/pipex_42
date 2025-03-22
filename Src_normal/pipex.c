@@ -6,19 +6,17 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:47:53 by alcarril          #+#    #+#             */
-/*   Updated: 2025/03/18 08:02:30 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 00:28:46 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**g_env;
-
-void	imput_process(char **argv, int *pipe_ports)
+void	imput_process(char **argv, int *pipe_ports, char **env)
 {
-	char	**comands;
-	char	*x_f;
-	pid_t	id;
+	char			**comands;
+	char			*x_f;
+	pid_t			id;
 
 	if (pipe(pipe_ports) == -1)
 		ft_error(NULL, NULL, NULL, NULL);
@@ -27,20 +25,20 @@ void	imput_process(char **argv, int *pipe_ports)
 		ft_error(NULL, NULL, NULL, NULL);
 	if (id == 0)
 	{
-		if (tunel_file(argv[1], 0) < 0)
-			ft_error(NULL, NULL, NULL, NULL);
 		pipe_forward(pipe_ports, 1, STDOUT_FILENO);
+		if (tunel_file(argv[1], 0) < 0)//si gestiono lo del cancelar el comando siguiete cunado no el src da error pero no gestion el orden de los menajes de error 
+			ft_error(NULL, NULL, NULL, NULL);
 		comands = ft_split(argv[2], ' ');
 		if (!comands)
-			ft_error(NULL, NULL, NULL, NULL);
+			exit (1);
 		x_f = comands[0];
-		x_f = check_exe(x_f);
-		if (execve(x_f, comands, NULL) == -1)
+		x_f = check_exe(x_f, env);
+		if (!x_f || execve(x_f, comands, NULL) == -1)
 			ft_error(comands, NULL, x_f, NULL);
 	}
 }
 
-void	output_process(char **argv, int *pipe_ports)
+void	output_process(char **argv, int *pipe_ports, char **env)
 {
 	char	**comands;
 	char	*x_file;
@@ -53,14 +51,14 @@ void	output_process(char **argv, int *pipe_ports)
 		ft_error(NULL, NULL, NULL, NULL);
 	if (id == 0)
 	{
-		if (tunel_file(argv[4], 1) < 0)
+		if (tunel_file(argv[4], 1) < 0)//si gestiono que se cree el archivo si no existe y que se trunque si exite y no se trunca si existe pero sin permisos
 			ft_error(NULL, NULL, NULL, NULL);
 		comands = ft_split(argv[3], ' ');
 		if (!comands)
 			ft_error(NULL, NULL, NULL, NULL);
 		x_file = comands[0];
-		x_file = check_exe(x_file);
-		if (execve(x_file, comands, NULL) == -1)
+		x_file = check_exe(x_file, env);
+		if (!x_file || execve(x_file, comands, NULL) == -1)
 			ft_error(comands, NULL, x_file, NULL);
 	}
 	id = waitpid(-1, &status, 0);
@@ -74,7 +72,7 @@ int	tunel_file(char *file, char flag)
 
 	if (flag == 0)
 	{
-		fd_target = open(file, O_RDONLY, 0664);
+		fd_target = open(file, O_RDONLY);
 		if (fd_target < 0)
 			return (-1);
 		if (dup2(fd_target, STDIN_FILENO) == -1)
@@ -82,7 +80,7 @@ int	tunel_file(char *file, char flag)
 	}
 	else
 	{
-		fd_target = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0664);
+		fd_target = open(file, O_CREAT |O_TRUNC | O_WRONLY , 0664);
 		if (fd_target < 0)
 			return (-1);
 		if (dup2(fd_target, STDOUT_FILENO) == -1)
@@ -115,13 +113,47 @@ int	main(int argz, char **argv, char **env)
 
 	if (argz == 5)
 	{
-		g_env = env;
-		imput_process(argv, pipe_ports);
-		output_process(argv, pipe_ports);
+		imput_process(argv, pipe_ports, env);
+		output_process(argv, pipe_ports, env);
 		close(STDIN_FILENO);
 		close(STDOUT_FILENO);
 		close(STDERR_FILENO);
 		return (0);
 	}
 	return (ft_putstr_fd(ERROR, 2), 1);
+}
+
+
+int	tunel_in_file(char *file)
+{
+	int	fd_trgt;
+
+	if (access(file, F_OK | R_OK) == -1)
+		return (-1);
+	fd_trgt = open(file, O_RDONLY, 0664);
+	if (fd_trgt < 0)
+		return (-1);
+	if (dup2(fd_trgt, STDIN_FILENO) == -1)
+	{
+		close(fd_trgt);
+		return (-1);
+	}
+	return (close(fd_trgt), fd_trgt);
+}
+
+int	tunel_out_file(char *file)
+{
+	int	fd_trgt;
+
+	if (access(file, F_OK) != -1 && access(file, W_OK) == -1)
+		return (-1);
+	fd_trgt = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	if (fd_trgt < 0)
+		return (-1);
+	if (dup2(fd_trgt, STDOUT_FILENO) == -1)
+	{
+		close(fd_trgt);
+		return (-1);
+	}
+	return (close(fd_trgt), fd_trgt);
 }

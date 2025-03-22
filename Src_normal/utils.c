@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:55:05 by alex              #+#    #+#             */
-/*   Updated: 2025/03/20 23:13:34 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/21 21:39:52 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ char	*get_env_value(const char *key_value, char **env)
 	if (new_value == NULL)
 		return (NULL);
 	i = 0;
-	while (g_env[i] != NULL)
+	while (env[i] != NULL)
 	{
 		if ((ft_strncmp(new_value, env[i], len + 1)) == 0)
 		{
 			free(new_value);
-			return ((g_env[i] + len + 1));
+			return ((env[i] + len + 1));
 		}
 		i++;
 	}
@@ -106,9 +106,9 @@ void	ft_error(char **table1, char **table2, char *str1, char *str2)
 		free(str1);
 	if (str2)
 		free(str2);
+	perror(NULL);
 	close (STDIN_FILENO);
 	close (STDOUT_FILENO);
-	perror(strerror(errno));
 	close (STDERR_FILENO);
 	exit(1);
 }

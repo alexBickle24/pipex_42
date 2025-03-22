@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:03:16 by alex              #+#    #+#             */
-/*   Updated: 2025/03/21 19:09:51 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 01:20:13 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void			ft_free_table(char **ptr);
 int				tunel_in_file(char *file);
 int				tunel_out_file(char *file);
 void			pipe_forward(int *pipe_reference, int pipe_port, int fd);
-void			search_and_exec(t_control *control, int position, char error_mode);
+void			search_and_exec(t_control *control, int position);
 char			*parse_prompt(char **arg, int argz, int *control, char **env);
 void			write_line_in_heredoc(char *line, int fd_inter, char **env);
 char			*trim_line(char *line);

@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 03:03:16 by alex              #+#    #+#             */
-/*   Updated: 2025/03/18 00:25:02 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/21 21:37:23 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@
 
 # define ERROR "Arguments ERROR: Need more arguments\n"
 
-extern char	**g_env;
-
-void	imput_process(char **argv, int *pipe_ports);
-void	output_process(char **argv, int *pipe_ports);
+void	imput_process(char **argv, int *pipe_ports, char **env);
+void	output_process(char **argv, int *pipe_ports, char **env);
 int		tunel_file(char *file, char flag);
+int		tunel_in_file(char *file);
+int		tunel_out_file(char *file);
 void	pipe_forward(int *pipe_reference, int pipe_port, int fd);
-char	*check_exe(char *x_file);
-char	*get_env_value(const char *key_value);
+char	*check_exe(char *x_file, char **env);
+char	*get_env_value(const char *key_value, char **env);
 char	*search_relative_path(char **posible_paths, char *x_file);
 void	ft_error(char **table1, char **table2, char *str1, char *str2);
 void	ft_free_table(char **ptr);

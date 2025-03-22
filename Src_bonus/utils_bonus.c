@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:55:05 by alex              #+#    #+#             */
-/*   Updated: 2025/03/21 01:12:59 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/22 04:56:16 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*check_exe(char *x_file, char **env)
 	char	*absolute_paths;
 	char	*path;
 
+	if (!ft_strncmp(x_file, "./", 2))
+		return (x_file);
 	absolute_paths = get_env_value("PATH", env);
 	if (!absolute_paths)
 	{
