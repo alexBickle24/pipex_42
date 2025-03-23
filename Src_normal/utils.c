@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:55:05 by alex              #+#    #+#             */
-/*   Updated: 2025/03/21 21:39:52 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/23 23:05:58 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,14 @@ char	*search_relative_path(char **posible_paths, char *x_file)
 
 void	ft_error(char **table1, char **table2, char *str1, char *str2)
 {
+	if (str1 && str1 != table1[0])
+		free(str1);
+	if (str2 && str2 != table1[0])
+		free(str2);
 	if (table1)
 		ft_free_table(table1);
 	if (table2)
 		ft_free_table(table2);
-	if (str1)
-		free(str1);
-	if (str2)
-		free(str2);
 	perror(NULL);
 	close (STDIN_FILENO);
 	close (STDOUT_FILENO);

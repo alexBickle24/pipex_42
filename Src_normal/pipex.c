@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 17:47:53 by alcarril          #+#    #+#             */
-/*   Updated: 2025/03/22 14:25:17 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/23 22:50:25 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	output_process(char **argv, int *pipe_ports, char **env)
 			ft_error(NULL, NULL, NULL, NULL);
 		comands = ft_split(argv[3], ' ');
 		if (!comands)
-			ft_error(NULL, NULL, NULL, NULL);
+			exit (1);
 		x_file = comands[0];
 		x_file = check_exe(x_file, env);
 		if (!x_file || execve(x_file, comands, NULL) == -1)
