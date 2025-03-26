@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exes_and_redirs.c                                  :+:      :+:    :+:   */
+/*   exes_and_redirs_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 02:56:26 by alex              #+#    #+#             */
-/*   Updated: 2025/03/22 15:00:10 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/26 06:00:11 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,10 @@ void	search_and_exec(t_control *c, int position)
 	char	*x_file;
 
 	orders_list = ft_split((const char *)(c->args[position]), ' ');
-	if (!orders_list)
+	if (!orders_list || !orders_list[0])
 	{
 		free(c->src_file);
+		ft_putstr_fd("comand not found\n", 2);
 		exit(1);
 	}
 	comand = orders_list[0];

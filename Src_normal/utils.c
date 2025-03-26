@@ -6,7 +6,7 @@
 /*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 22:55:05 by alex              #+#    #+#             */
-/*   Updated: 2025/03/23 23:05:58 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/26 05:25:12 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ char	*check_exe(char *x_file, char **env)
 	absolute_paths = get_env_value("PATH", env);
 	if (!absolute_paths)
 	{
-		if (access(x_file, F_OK | X_OK))
+		if (access(x_file, F_OK | X_OK) != -1)
 			return (x_file);
 		return (NULL);
 	}
 	posible_paths = ft_split(absolute_paths, ':');
-	if (!posible_paths)
+	if (!posible_paths || !absolute_paths[0])
 		return (NULL);
 	relative_path = search_relative_path(posible_paths, x_file);
 	if (!relative_path)
