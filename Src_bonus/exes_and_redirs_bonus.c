@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exes_and_redirs_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: alcarril <alcarril@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 02:56:26 by alex              #+#    #+#             */
-/*   Updated: 2025/03/26 06:00:11 by alex             ###   ########.fr       */
+/*   Updated: 2025/03/27 16:15:12 by alcarril         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ void	search_and_exec(t_control *c, int position)
 	if (!orders_list || !orders_list[0])
 	{
 		free(c->src_file);
+		if (orders_list || !orders_list[0])
+			ft_free_table(orders_list);
 		ft_putstr_fd("comand not found\n", 2);
 		exit(1);
 	}

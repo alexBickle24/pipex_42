@@ -3,26 +3,26 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alex <alex@student.42.fr>                  +#+  +:+       +#+         #
+#    By: alcarril <alcarril@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/04 21:21:20 by alex              #+#    #+#              #
-#    Updated: 2025/03/22 04:04:11 by alex             ###   ########.fr        #
+#    Updated: 2025/03/27 18:10:21 by alcarril         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror
 
 SRC_FILE = Src_normal
 SRC_BONUS = Src_bonus
 INCLUDE = Include
 
-SRCS = $(SRC_FILE)/pipex.c $(SRC_FILE)/utils.c
+SRCS = $(SRC_FILE)/pipex.c $(SRC_FILE)/utils.c $(SRC_FILE)/utils2.c 
 BONUS_SRCS = $(SRC_BONUS)/pipex_bonus.c $(SRC_BONUS)/utils_bonus.c \
 			$(SRC_BONUS)/parse_bonus.c \
-			$(SRC_BONUS)/exes_and_redirs_bonus.c
+			$(SRC_BONUS)/exes_and_redirs_bonus.c 
 			
 LIBFT_DIR = $(INCLUDE)/libft
 PRINTF_DIR = $(INCLUDE)/ft_printf
