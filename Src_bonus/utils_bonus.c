@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
+//esta funcion hay que retocarla para que pueda tener en cuenta los scripsts de .sh. Es cambiar el orden
+//de los access
 char	*check_exe(char *x_file, char **env)
 {
 	char	**absolute_paths_table;
