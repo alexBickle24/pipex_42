@@ -1,53 +1,92 @@
-Here is a README draft in English for your project based on its description:
+
 
 ---
 
-# pipex_42
+# pipex_42 🚰
 
-Simulates the behavior of Shell pipes using C. This project covers topics such as pipes, redirections, IPC (Inter-Process Communication), process management, global variables, and parsing. The objective is to reliably reproduce the functionalities of pipes in Unix-like shells.
+**Pipes, redirections, IPC, process management, global variables, parsing, and more. This project aims to simulate the behavior of Shell pipes using C. The goal of the project... to become a reliable plumber! 🧑‍🔧**
+
+**pipex_42** is a C project focused on simulating the behavior of shell pipes. It includes topics such as pipes, redirections, inter-process communication (IPC), process management, global variables, parsing, and more. The main objective is to reliably reproduce shell pipe functionalities in C—because every good developer needs to be a reliable plumber!
 
 ## Features
 
-- Implementation of pipe and redirection mechanisms
-- Handling of process creation and management
+- Implementation of pipe and redirection mechanisms in C
+- Process creation and management
 - Inter-process communication (IPC)
-- Parsing and execution of shell commands
+- Shell command parsing and execution
+- **Bonus:** Multiple commands and "here document" support
 
 ## Requirements
 
-- GCC or another C compiler
+- GCC or compatible C compiler
 - Unix-like operating system (Linux, macOS)
-- Basic knowledge of shell and C programming
+- Basic knowledge of Shell and C programming
 
-## Getting Started
+## Installation
 
 Clone the repository:
-
-```bash
+```sh
 git clone https://github.com/alexBickle24/pipex_42.git
 cd pipex_42
 ```
 
 Compile the project:
-
-```bash
+```sh
 make
 ```
 
 ## Usage
 
-Run the executable with the required arguments. Example:
+### Basic Usage
 
-```bash
+Execute the program with the following arguments:
+```sh
 ./pipex infile cmd1 cmd2 outfile
 ```
+This command will:
+- Take input from `infile`  
+- Execute `cmd1`, pipe its output to `cmd2`  
+- Write the final output to `outfile`
 
-This will execute `cmd1` with input from `infile`, pipe the output to `cmd2`, and write the final output to `outfile`.
+### Bonus Features 🎉
+
+If you build and use the **bonus version**, you unlock extra functionalities:
+
+#### 1. Multiple Commands
+
+Chain more than two commands, just like in a real shell pipeline:
+```sh
+./pipex infile cmd1 cmd2 cmd3 ... cmdN outfile
+```
+This will pipe the output through each command in sequence, from `infile` to `outfile`.
+
+#### 2. Here Document ("here_doc") 📑
+
+Support for “here_doc” syntax, allowing you to provide input directly in the terminal:
+```sh
+./pipex here_doc LIMITER cmd1 cmd2 ... cmdN outfile
+```
+This will:
+- Read input from the terminal until the `LIMITER` word is encountered
+- Process the commands in sequence
+- Write the result to `outfile`
+
+## Example
+
+```sh
+./pipex infile "grep hello" "wc -l" outfile
+```
+Or, using bonus features:
+```sh
+./pipex here_doc END "cat" "wc -l" outfile
+```
+Then type your input, and finish with `END` on a new line.
 
 ## Author
 
-alexBickle24
+alexBickle24  
+[GitHub Profile](https://github.com/alexBickle24)
 
 ---
 
-Feel free to customize or expand this README as needed!
+Let me know if you’d like to adjust the emoji placement or add more examples!
