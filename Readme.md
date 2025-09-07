@@ -1,7 +1,4 @@
 
-
----
-
 # pipex_42 🚰
 
 **Pipes, redirections, IPC, process management, global variables, parsing, and more. This project aims to simulate the behavior of Shell pipes using C. The goal of the project... to become a reliable plumber! 🧑‍🔧**
